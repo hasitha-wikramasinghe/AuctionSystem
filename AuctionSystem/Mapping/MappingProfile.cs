@@ -1,4 +1,5 @@
-﻿using AuctionSystem.Models;
+﻿using AuctionSystem.DTOs;
+using AuctionSystem.Models;
 using AutoMapper;
 
 namespace AuctionSystem.Mapping
@@ -12,6 +13,9 @@ namespace AuctionSystem.Mapping
                 .ReverseMap()
                 .ForMember(dest => dest.Password, opt => opt.Ignore())
                 .ForMember(dest => dest.Role, opt => opt.Ignore());
+
+            CreateMap<ItemDto, Item>()
+                .ReverseMap();
         }
     }
 }

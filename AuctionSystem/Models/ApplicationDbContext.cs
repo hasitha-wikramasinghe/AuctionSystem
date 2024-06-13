@@ -11,5 +11,6 @@ namespace AuctionSystem.Models
         }
 
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Item> Items { get; set; }
     }
 }
