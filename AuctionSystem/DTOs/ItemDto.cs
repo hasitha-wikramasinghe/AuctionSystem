@@ -8,7 +8,10 @@ namespace AuctionSystem.DTOs
         [Required]
         public string Name { get; set; } = string.Empty;
         [Required]
-        public double Price { get; set; }
+        public double StartedPrice { get; set; }
+        public double? HighestPrice { get; set; }
+        public string? HighestBidder { get; set; } 
+        public string Status { get; set; } = string.Empty;
         public string? Description { get; set; }
     }
 }

@@ -1,0 +1,56 @@
+﻿@model Item
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Items</title>
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h1>Edit Item</h1>
+            <div class="row pl-2 pr-2">
+                <div class="col-md-3">
+                    <label asp-for="Name" class="control-label">Name</label>
+                    <input asp-for="Name" type="text" class="form-control" placeholder="Name"  />
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Description" class="control-label">Description</label>
+                    <input asp-for="Description" type="text" class="form-control" placeholder="Description"  />
+                    <input asp-for="Id" name="hiddenItemId" type="hidden" />
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="StartedPrice" class="control-label">Started price</label>
+                    <input asp-for="StartedPrice" type="text" class="form-control" placeholder="Started price"  />
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="HighestPrice" class="control-label">HighestPrice</label>
+                    <input asp-for="HighestPrice" type="text" class="form-control" placeholder="HighestPrice" />
+                </div>
+            </div>
+            <div class="row pl-2 pr-2">
+                <div class="col-md-3">
+                    <label asp-for="HighestBidder" class="control-label">HighestBidder</label>
+                    <input asp-for="HighestBidder" type="text" class="form-control" placeholder="HighestBidder" />
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Status" class="control-label">Status</label>
+                    <input asp-for="Status" type="text" class="form-control" placeholder="Status" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+</body>
+</html>
+
