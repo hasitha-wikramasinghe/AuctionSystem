@@ -46,7 +46,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Authentication}/{action=Index}/{id?}");
+    pattern: "{controller=Auction}/{action=Index}/{id?}");
 
 using (var scope = app.Services.CreateScope())
 {

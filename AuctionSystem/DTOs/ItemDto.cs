@@ -13,5 +13,8 @@ namespace AuctionSystem.DTOs
         public string? HighestBidder { get; set; } 
         public string Status { get; set; } = string.Empty;
         public string? Description { get; set; }
+
+        public string? CurrentBidder { get; set; }
+        public double? BiddingPrice { get; set; }
     }
 }

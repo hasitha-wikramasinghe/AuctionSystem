@@ -1,0 +1,149 @@
+﻿@model AuctionSystem.DTOs.ItemDto
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Item</title>
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h1>Bid Item</h1>
+            <form onsubmit="return validateBid()" asp-action="BidNow" asp-controller="Auction" method="post" >
+                <div class="row pl-2 pr-2">
+                    <div class="col-md-3">
+                        <label asp-for="Name" class="control-label">Name</label>
+                        <input asp-for="Name" id="txtName" type="text" class="form-control" placeholder="Name" readonly />
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Description" class="control-label">Description</label>
+                        <input asp-for="Description" id="txtDescription" type="text" class="form-control" placeholder="Description" readonly />
+                        <input asp-for="Id" id="txtId" name="hiddenItemId" type="hidden" />
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="StartedPrice" class="control-label">Started price</label>
+                        <input asp-for="StartedPrice" id="txtStartedPrice" type="text" class="form-control" placeholder="Started price" readonly />
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="HighestPrice" class="control-label">Highest Price</label>
+                        <input asp-for="HighestPrice" id="txtHighestPrice" type="text" class="form-control" placeholder="HighestPrice" readonly />
+                    </div>
+                </div>
+                <br />
+                <div class="row pl-2 pr-2">
+                    <div class="col-md-3">
+                        <label asp-for="HighestBidder" class="control-label">Highest Bidder</label>
+                        <input asp-for="HighestBidder"  type="text" class="form-control" placeholder="Highest Bidder" readonly/>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Status" class="control-label">Status</label>
+                        <input asp-for="Status" id="txtStatus" type="text" class="form-control" placeholder="Status" readonly />
+                        <span id="lblStatusValidation" class="text-danger" style="display:none;">You can't bid for sold items.</span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="CurrentBidder" class="control-label">Your Name</label>
+                        <input asp-for="CurrentBidder" id="txtCurrentBidder" type="text" class="form-control" placeholder="Your name" />
+                        <span id="lblCurrentBidder" class="text-danger" style="display:none;">This field is mandotary.</span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="BiddingPrice" class="control-label">Your price</label>
+                        <input asp-for="BiddingPrice" id="txtBiddingPrice" type="text" class="form-control" placeholder="Your price" />
+                        <span id="lblBidingPriceValidation" class="text-danger" style="display:none;">Your price should be greater than started price and highest price.</span>
+                        <span id="lblBidingPriceNullValidation" class="text-danger" style="display:none;">This field is mandotary.</span>
+                    </div>
+                </div>
+                <br />
+                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+        //     $('#btnEditItem').click(function (event) {
+        //         event.preventDefault();
+
+        //         var formData = {
+        //             id: $('#txtId').val(),
+        //             name: $('#txtName').val(),
+        //             description: $('#txtDescription').val(),
+        //             startedPrice: $('#txtStartedPrice').val(),
+        //             highestPrice: $('#txtHighestPrice').val(),
+        //             highestBidder: $('#txtHighestBidder').val(),
+        //             status: $('#txtStatus').val()
+        //         };
+
+        //         $.ajax({
+        //             url: '/api/Item/Update',
+        //             type: 'POST',
+        //             contentType: 'application/json',
+        //             data: JSON.stringify(formData),
+        //             success: function (data) {
+        //                 alert('Item has been editted successfully');
+        //             },
+        //             error: function (jqXHR, textStatus, errorThrown) {
+        //                 alert('Something went wrong, please try again.');
+        //             }
+        //         });
+        //     });
+
+            $("#txtBiddingPrice").keyup(function () {
+                $('#lblBidingPriceValidation').css('display', 'none');
+            });
+
+            $("#txtCurrentBidder").keyup(function () {
+                $('#lblCurrentBidder').css('display', 'none');
+            });
+        });
+
+        function validateBid() {
+            var startedPrice = $('#txtStartedPrice').val();
+            var highestPrice = $('#txtHighestPrice').val();
+            var currentPrice = $('#txtBiddingPrice').val();
+            var currentBidder = $('#txtCurrentBidder').val();
+            var status = $('#txtStatus').val();
+
+            if (isNaN(startedPrice) || isNaN(highestPrice) || isNaN(currentPrice)) {
+                console.log("Invalid input values");
+                return false;
+            }
+
+            if (status == "Sold") {
+                $('#lblStatusValidation').css('display', 'block');
+                return false;
+            }
+
+            if (!currentBidder) {
+                $('#lblCurrentBidder').css('display', 'block');
+                return false;
+            }
+
+            if (!currentPrice) {
+                $('#lblBidingPriceNullValidation').css('display', 'block');
+                return false;
+            }
+
+            if (startedPrice > currentPrice || highestPrice > currentPrice) {
+                $('#lblBidingPriceValidation').css('display', 'block');
+                return false;
+            } 
+        }
+
+
+    </script>
+</body>
+</html>
+

@@ -22,17 +22,18 @@ namespace AuctionSystem.Controllers.Api
         }
 
         [HttpPost]
-        [Route("new")]
+        [Route("New")]
         public async Task<IActionResult> PostItem(ItemDto itemDto)
         {
             var item = _mapper.Map<Item>(itemDto);
+            if (item.Status == null) item.Status = "Active";
             _context.Items.Add(item);
             await _context.SaveChangesAsync();
 
             return Ok(item.Id);
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("Update")]
         public async Task<IActionResult> UpdateItem(ItemDto itemDto)
         {

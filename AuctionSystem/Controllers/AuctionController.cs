@@ -1,4 +1,6 @@
-﻿using AuctionSystem.Models;
+﻿using AuctionSystem.DTOs;
+using AuctionSystem.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,10 +9,13 @@ namespace AuctionSystem.Controllers
     public class AuctionController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IMapper _mapper;
         public AuctionController(
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -25,6 +30,38 @@ namespace AuctionSystem.Controllers
         {
             var item = await _context.Items.FindAsync(id);
             return View(item);
+        }
+
+        [HttpGet]
+        public IActionResult New()
+        {
+            var itemDto = new ItemDto();
+            return View(itemDto);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BidNow(int id)
+        {
+            var item = _mapper.Map<ItemDto>(await _context.Items.FindAsync(id));
+            return View(item);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> BidNow(ItemDto itemDto)
+        {
+            if (itemDto.BiddingPrice > itemDto.StartedPrice 
+                && itemDto.BiddingPrice > itemDto.HighestPrice 
+                && itemDto.Status != "Sold")
+            {
+                itemDto.HighestPrice = itemDto.BiddingPrice;
+                itemDto.HighestBidder = itemDto.CurrentBidder;
+            }
+            
+            var item = _mapper.Map<Item>(itemDto);
+            _context.Items.Update(item);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
     }
 }

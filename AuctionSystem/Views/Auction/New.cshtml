@@ -1,4 +1,4 @@
-﻿@model Item
+﻿@model AuctionSystem.DTOs.ItemDto
 @{
     Layout = null;
 }
@@ -18,36 +18,35 @@
             <h1>Edit Item</h1>
             <div class="row pl-2 pr-2">
                 <div class="col-md-3">
-                    <label asp-for="Name" class="control-label">Name</label>
-                    <input asp-for="Name" id="txtName" type="text" class="form-control" placeholder="Name"  />
+                    <label class="control-label">Name</label>
+                    <input id="txtName" type="text" class="form-control" placeholder="Name" />
                 </div>
                 <div class="col-md-3">
-                    <label asp-for="Description" class="control-label">Description</label>
-                    <input asp-for="Description" id="txtDescription" type="text" class="form-control" placeholder="Description" />
-                    <input asp-for="Id" id="txtId" name="hiddenItemId" type="hidden" />
+                    <label class="control-label">Description</label>
+                    <input id="txtDescription" type="text" class="form-control" placeholder="Description" />
                 </div>
                 <div class="col-md-3">
-                    <label asp-for="StartedPrice" class="control-label">Started price</label>
-                    <input asp-for="StartedPrice" id="txtStartedPrice" type="text" class="form-control" placeholder="Started price" />
+                    <label class="control-label">Started price</label>
+                    <input id="txtStartedPrice" type="text" class="form-control" placeholder="Started price" />
                 </div>
                 <div class="col-md-3">
-                    <label asp-for="HighestPrice" class="control-label">Highest Price</label>
-                    <input asp-for="HighestPrice" id="txtHighestPrice" type="text" class="form-control" placeholder="HighestPrice" />
+                    <label class="control-label">HighestPrice</label>
+                    <input id="txtHighestPrice" type="text" class="form-control" placeholder="HighestPrice" />
                 </div>
             </div>
             <br />
             <div class="row pl-2 pr-2">
                 <div class="col-md-3">
-                    <label asp-for="HighestBidder" class="control-label">Highest Bidder</label>
-                    <input asp-for="HighestBidder" id="txtHighestBidder" type="text" class="form-control" placeholder="HighestBidder" />
+                    <label class="control-label">HighestBidder</label>
+                    <input id="txtHighestBidder" type="text" class="form-control" placeholder="HighestBidder" />
                 </div>
                 <div class="col-md-3">
-                    <label asp-for="Status" class="control-label">Status</label>
-                    <input asp-for="Status" id="txtStatus" type="text" class="form-control" placeholder="Status" />
+                    <label class="control-label">Status</label>
+                    <input id="txtStatus" type="text" class="form-control" placeholder="Status" />
                 </div>
             </div>
             <br />
-            <button type="button" id="btnEditItem" class="btn btn-primary btn-sm">Submit</button>
+            <button type="button" id="btnSave" class="btn btn-primary btn-sm">Submit</button>
         </div>
         <div class="col-md-2"></div>
     </div>
@@ -58,26 +57,29 @@
 
     <script>
         $(document).ready(function () {
-            $('#btnEditItem').click(function (event) {
-                event.preventDefault(); 
+            $('#btnSave').click(function (event) {
+                event.preventDefault();
+
+                function parseNullableFloat(value) {
+                    return value === "" ? null : parseFloat(value);
+                }
 
                 var formData = {
-                    id: $('#txtId').val(),
                     name: $('#txtName').val(),
                     description: $('#txtDescription').val(),
-                    startedPrice: $('#txtStartedPrice').val(),
-                    highestPrice: $('#txtHighestPrice').val(),
+                    startedPrice: parseNullableFloat($('#txtStartedPrice').val()),
+                    highestPrice: parseNullableFloat($('#txtHighestPrice').val()),
                     highestBidder: $('#txtHighestBidder').val(),
                     status: $('#txtStatus').val()
                 };
 
                 $.ajax({
-                    url: '/api/Item/Update', 
-                    type: 'POST', 
-                    contentType: 'application/json', 
-                    data: JSON.stringify(formData), 
+                    url: '/api/Item/New',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
                     success: function (data) {
-                        alert('Item has been editted successfully');
+                        window.location = '/';
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         alert('Something went wrong, please try again.');
