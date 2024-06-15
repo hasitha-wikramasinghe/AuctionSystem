@@ -60,7 +60,12 @@
                     </div>
                 </div>
                 <br />
-                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                <div class="row pl-2 pr-2">
+                    <div class="col-md-12 text-right">
+                        <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                        <button type="button" class="btn btn-success btn-sm" id="checkoutButton">Checkout</button>
+                    </div>
+                </div>
             </form>
         </div>
         <div class="col-md-2"></div>
@@ -73,32 +78,34 @@
     <script>
         $(document).ready(function () {
 
-        //     $('#btnEditItem').click(function (event) {
-        //         event.preventDefault();
+            function parseNullableFloat(value) {
+                return value === "" ? null : parseFloat(value);
+            }
 
-        //         var formData = {
-        //             id: $('#txtId').val(),
-        //             name: $('#txtName').val(),
-        //             description: $('#txtDescription').val(),
-        //             startedPrice: $('#txtStartedPrice').val(),
-        //             highestPrice: $('#txtHighestPrice').val(),
-        //             highestBidder: $('#txtHighestBidder').val(),
-        //             status: $('#txtStatus').val()
-        //         };
+            $('#checkoutButton').click(function () {
+                var paymentDetails = {
+                    Amount: parseNullableFloat($('#txtBiddingPrice').val()),
+                    Currency: 'USD', 
+                    TokenId: 'tok_visa', 
+                    Description: $('#txtDescription').val(),
+                    Id: $('#txtId').val(),
+                    BidderName: $('#txtCurrentBidder').val()
+                };
 
-        //         $.ajax({
-        //             url: '/api/Item/Update',
-        //             type: 'POST',
-        //             contentType: 'application/json',
-        //             data: JSON.stringify(formData),
-        //             success: function (data) {
-        //                 alert('Item has been editted successfully');
-        //             },
-        //             error: function (jqXHR, textStatus, errorThrown) {
-        //                 alert('Something went wrong, please try again.');
-        //             }
-        //         });
-        //     });
+                $.ajax({
+                    url: '../../api/Payment/charge',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(paymentDetails),
+                    success: function (response) {
+                        alert('Payment successful: ');
+                        window.location = '/';
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Payment failed: ' + xhr.responseText);
+                    }
+                });
+            });
 
             $("#txtBiddingPrice").keyup(function () {
                 $('#lblBidingPriceValidation').css('display', 'none');

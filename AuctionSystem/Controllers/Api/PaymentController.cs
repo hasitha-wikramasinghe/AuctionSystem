@@ -10,14 +10,18 @@ namespace AuctionSystem.Controllers.Api
     public class PaymentController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        public PaymentController(IConfiguration configuration)
+        private readonly ApplicationDbContext _context;
+        public PaymentController(
+            IConfiguration configuration,
+            ApplicationDbContext context)
         {
             _configuration = configuration;
             StripeConfiguration.ApiKey = _configuration["Stripe:ApiKey"];
+            _context = context;
         }
 
         [HttpPost("charge")]
-        public IActionResult Charge([FromBody]PaymentDetails paymentDetails)
+        public async Task<IActionResult> Charge([FromBody]PaymentDetails paymentDetails)
         {
             try
             {
@@ -31,6 +35,16 @@ namespace AuctionSystem.Controllers.Api
 
                 var service = new ChargeService();
                 var charge = service.Create(options);
+
+                var item = await _context.Items.FindAsync(paymentDetails.Id);
+                if (item != null)
+                {
+                    item.Status = "Sold";
+                    item.HighestPrice = paymentDetails.Amount;
+                    item.HighestBidder = paymentDetails.BidderName;
+                    _context.Items.Update(item);
+                    await _context.SaveChangesAsync();
+                }
 
                 return Ok(charge);
             }

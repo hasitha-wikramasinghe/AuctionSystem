@@ -21,7 +21,7 @@ namespace AuctionSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var items = await _context.Items.ToListAsync();
+            var items = await _context.Items.Where(item => item.Status != "Sold").ToListAsync();
             return View(items);
         }
 
@@ -54,6 +54,7 @@ namespace AuctionSystem.Controllers
             {
                 itemDto.HighestPrice = itemDto.BiddingPrice;
                 itemDto.HighestBidder = itemDto.CurrentBidder;
+                itemDto.Status = "Sold";
             }
             
             var item = _mapper.Map<Item>(itemDto);

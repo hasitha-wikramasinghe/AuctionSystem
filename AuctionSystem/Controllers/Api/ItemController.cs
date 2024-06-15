@@ -26,7 +26,7 @@ namespace AuctionSystem.Controllers.Api
         public async Task<IActionResult> PostItem(ItemDto itemDto)
         {
             var item = _mapper.Map<Item>(itemDto);
-            if (item.Status == null) item.Status = "Active";
+            if (string.IsNullOrEmpty(itemDto.Status)) item.Status = "Active";
             _context.Items.Add(item);
             await _context.SaveChangesAsync();
 
