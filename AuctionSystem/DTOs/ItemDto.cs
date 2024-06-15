@@ -14,6 +14,7 @@ namespace AuctionSystem.DTOs
         public string Status { get; set; } = string.Empty;
         public string? Description { get; set; }
 
+        // Additional fields just for UI and some business logics
         public string? CurrentBidder { get; set; }
         public double? BiddingPrice { get; set; }
     }

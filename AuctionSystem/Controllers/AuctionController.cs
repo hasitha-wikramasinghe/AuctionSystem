@@ -50,7 +50,6 @@ namespace AuctionSystem.Controllers
         public async Task<ActionResult> BidNow(ItemDto itemDto)
         {
             if (itemDto.BiddingPrice > itemDto.StartedPrice 
-                && itemDto.BiddingPrice > itemDto.HighestPrice 
                 && itemDto.Status != "Sold")
             {
                 itemDto.HighestPrice = itemDto.BiddingPrice;
